@@ -1,37 +1,75 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Gallarify — Public Memories</title>
+  <meta name="description" content="Gallarify — a beautiful public place to share and discover memories.">
+  <title>Gallarify — Share the Moment</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <div class="brand">Gallarify</div>
-    <span class="public-badge">PUBLIC GALLERY</span>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Gallarify home">Gallarify</a>
+    <div class="header-right">
+      <span class="public-badge"><span class="dot"></span> PUBLIC GALLERY</span>
+    </div>
   </header>
+
   <main>
     <section class="hero">
-      <p class="eyebrow">PUBLIC MEMORIES</p>
-      <h1>Share the moments<br><span>worth remembering.</span></h1>
-      <p>A free public image wall. No account. No login. Upload an image and share the memory.</p>
-    </section>
-    <section class="upload-area">
-      <div class="upload-panel">
-        <div>
-          <h2>Share an image</h2>
-          <p class="muted">Anyone can upload. Images are publicly visible.</p>
-        </div>
-        <input id="title" class="input" maxlength="200" placeholder="Caption (optional)">
-        <input id="file" class="input" type="file" accept="image/*">
-        <img id="preview" class="preview" alt="Image preview">
-        <button id="upload" class="button">Upload image</button>
-        <div id="msg" class="msg"></div>
+      <div class="hero-copy">
+        <p class="eyebrow">A WALL OF MEMORIES</p>
+        <h1>Share the moment.<br><span>Keep it forever.</span></h1>
+        <p class="hero-text">A simple, beautiful public gallery for the moments people want to remember. No account. No login. Just upload and share.</p>
+        <a class="hero-link" href="#upload">Share a memory <span>↓</span></a>
       </div>
     </section>
-    <section id="gallery" class="grid"><div class="loading">Loading memories…</div></section>
+
+    <section class="upload-section" id="upload">
+      <div class="upload-panel">
+        <div class="upload-heading">
+          <div>
+            <p class="section-label">UPLOAD</p>
+            <h2>Add your moment</h2>
+            <p class="muted">Choose an image, add an optional caption, and put it on the wall.</p>
+          </div>
+          <div class="upload-icon" aria-hidden="true">＋</div>
+        </div>
+
+        <div class="form-grid">
+          <input id="title" class="input" maxlength="200" placeholder="Caption (optional)" aria-label="Caption">
+          <label class="file-drop" for="file">
+            <span class="file-icon">↥</span>
+            <span><strong>Choose an image</strong><small>PNG, JPG, WEBP up to 10 MB</small></span>
+          </label>
+          <input id="file" class="file-input" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
+        </div>
+
+        <img id="preview" class="preview" alt="Selected image preview">
+        <div class="upload-actions">
+          <div id="msg" class="msg" aria-live="polite"></div>
+          <button id="upload" class="button">Publish image <span>↗</span></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="gallery-section">
+      <div class="gallery-heading">
+        <div>
+          <p class="section-label">THE WALL</p>
+          <h2>Latest memories</h2>
+        </div>
+        <p class="gallery-note">Every image shared here is public.</p>
+      </div>
+      <section id="gallery" class="grid"><div class="loading">Loading memories…</div></section>
+    </section>
   </main>
+
+  <footer class="site-footer">
+    <div>Gallarify</div>
+    <div>Made by <strong>Raazim Tech</strong></div>
+  </footer>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app.js"></script>
 </body>
