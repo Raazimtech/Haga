@@ -1,1 +1,38 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Gallarify — Memories</title><link rel="stylesheet" href="style.css"></head><body><header><div class="brand">Gallarify</div><a href="admin.html">Admin</a></header><main><section class="hero"><p class="eyebrow">MEMORIES</p><h1>Keep the moments<br><span>worth remembering.</span></h1><p>A simple private collection of photos and memories.</p></section><section id="gallery" class="grid"><div class="loading">Loading memories…</div></section></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="app.js"></script></body></html>
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Gallarify — Public Memories</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="brand">Gallarify</div>
+    <span class="public-badge">PUBLIC GALLERY</span>
+  </header>
+  <main>
+    <section class="hero">
+      <p class="eyebrow">PUBLIC MEMORIES</p>
+      <h1>Share the moments<br><span>worth remembering.</span></h1>
+      <p>A free public image wall. No account. No login. Upload an image and share the memory.</p>
+    </section>
+    <section class="upload-area">
+      <div class="upload-panel">
+        <div>
+          <h2>Share an image</h2>
+          <p class="muted">Anyone can upload. Images are publicly visible.</p>
+        </div>
+        <input id="title" class="input" maxlength="200" placeholder="Caption (optional)">
+        <input id="file" class="input" type="file" accept="image/*">
+        <img id="preview" class="preview" alt="Image preview">
+        <button id="upload" class="button">Upload image</button>
+        <div id="msg" class="msg"></div>
+      </div>
+    </section>
+    <section id="gallery" class="grid"><div class="loading">Loading memories…</div></section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js"></script>
+</body>
+</html>
