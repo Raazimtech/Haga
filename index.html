@@ -1,73 +1,14 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#121212">
-  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-  <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-  <meta name="description" content="Gallerify is a premium public photo gallery for anonymous photo sharing and discovery. Upload memories by category, like photos, save favorites, and download public images.">
-  <meta name="keywords" content="Gallerify, public photo gallery, anonymous photo sharing, photo sharing, image gallery, photo community, photography, memories, Travel, Art, Cityscape, Nature, Inspiration">
-  <meta name="author" content="Raazim Tech">
-  <meta name="application-name" content="Gallerify">
-  <meta name="apple-mobile-web-app-title" content="Gallerify">
-  <link rel="canonical" href="https://raazimtech.github.io/Halkas/">
-  <link rel="icon" type="image/svg+xml" href="logo.svg">
-  <link rel="apple-touch-icon" href="logo.svg">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Gallerify">
-  <meta property="og:title" content="Gallerify — Public Photo Gallery">
-  <meta property="og:description" content="Discover and anonymously share beautiful public photos on Gallerify.">
-  <meta property="og:url" content="https://raazimtech.github.io/Halkas/">
-  <meta property="og:image" content="https://raazimtech.github.io/Halkas/logo.svg">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Gallerify — Public Photo Gallery">
-  <meta name="twitter:description" content="Anonymous public photo sharing and discovery with categories, likes, favorites, and downloads.">
-  <meta name="twitter:image" content="https://raazimtech.github.io/Halkas/logo.svg">
-  <title>Gallerify — Premium Public Photo Gallery</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"WebSite","name":"Gallerify","url":"https://raazimtech.github.io/Halkas/","description":"A premium public photo gallery for anonymous photo sharing and discovery.","publisher":{"@type":"Organization","name":"Raazim Tech","url":"https://raazimtech.github.io/Raazim-tech/"},"potentialAction":{"@type":"SearchAction","target":"https://raazimtech.github.io/Halkas/?q={search_term_string}","query-input":"required name=search_term_string"}}
-  </script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#121212"><meta name="robots" content="index, follow, max-image-preview:large"><meta name="description" content="Gallerify is a premium public photo gallery for anonymous photo sharing and discovery. Upload memories by category and download public images."><meta name="keywords" content="Gallerify, public photo gallery, anonymous photo sharing, photo sharing, image gallery, photography, memories, Travel, Art, Cityscape, Nature, Inspiration"><meta name="author" content="Raazim Tech"><meta name="application-name" content="Gallerify"><link rel="canonical" href="https://raazimtech.github.io/Halkas/"><link rel="icon" type="image/svg+xml" href="logo.svg"><link rel="apple-touch-icon" href="logo.svg"><meta property="og:type" content="website"><meta property="og:site_name" content="Gallerify"><meta property="og:title" content="Gallerify — Premium Public Photo Gallery"><meta property="og:description" content="Discover and anonymously share beautiful public photos on Gallerify."><meta property="og:url" content="https://raazimtech.github.io/Halkas/"><meta property="og:image" content="https://raazimtech.github.io/Halkas/logo.svg"><title>Gallerify — Premium Public Photo Gallery</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Gallerify","url":"https://raazimtech.github.io/Halkas/","description":"A premium public photo gallery for anonymous photo sharing and discovery.","publisher":{"@type":"Organization","name":"Raazim Tech","url":"https://raazimtech.github.io/Raazim-tech/"}}</script>
 </head>
 <body>
-  <header class="site-header">
-    <a class="brand" href="#top" aria-label="Gallerify home"><img src="logo.svg" alt="Gallerify logo"> <span>GALLERIFY</span></a>
-    <div class="search-wrap"><span class="search-icon">⌕</span><input id="search" type="search" placeholder="Search photos, captions, categories..." aria-label="Search photos"></div>
-    <div class="header-actions"><button class="nav-action active" data-view="explore">Explore</button><button class="gold-button" id="jumpUpload">＋ Upload</button><span class="anon-pill">✦ ANONYMOUS</span></div>
-  </header>
-  <div class="mobile-tags" id="mobileTags"></div>
-  <main id="top" class="app-shell">
-    <aside class="sidebar">
-      <div class="side-section"><p class="side-label">DISCOVER</p><button class="side-link active" data-view="explore"><span>◉</span> Explore</button><button class="side-link" data-view="favorites"><span>♡</span> Favorites <em id="favoriteCount">0</em></button></div>
-      <div class="side-section"><p class="side-label">CATEGORIES</p><div class="category-list" id="categoryList"></div></div>
-      <div class="side-note"><span class="shield">✓</span><div><strong>Anonymous by default</strong><small>No account or profile is required to upload.</small></div></div>
-    </aside>
-    <section class="content">
-      <section class="hero"><div><p class="eyebrow">THE PUBLIC PHOTO WALL</p><h1>Moments worth<br><span>keeping.</span></h1><p>Share a photo anonymously, choose a category, and let the community discover, like, favorite, and download it.</p></div><div class="hero-badge"><span>✦</span> PRIVATE AI SCREENING<br><small>Image checked locally before upload</small></div></section>
-      <section class="upload-card" id="upload"><div class="upload-top"><div><p class="section-kicker">PUBLISH A MEMORY</p><h2>Drop it on the wall.</h2><p class="muted">Choose one category before publishing. Your identity is never requested.</p></div><span class="secure-chip">NO LOGIN</span></div>
-        <div class="category-picker"><div class="picker-label">1. Choose a category</div><div class="category-buttons" id="uploadCategories"><button class="category-button" data-category="Travel">✈ Travel</button><button class="category-button" data-category="Art">✎ Art</button><button class="category-button" data-category="Cityscape">▦ Cityscape</button><button class="category-button" data-category="Nature">⌁ Nature</button><button class="category-button" data-category="Inspiration">✦ Inspiration</button></div></div>
-        <div class="form-row"><input id="title" class="input" maxlength="200" placeholder="Caption (optional)"><label class="file-drop" for="file"><span class="file-drop-icon">↥</span><span><strong>Choose an image</strong><small>JPG, PNG, WEBP or GIF · max 10 MB</small></span></label><input id="file" class="file-input" type="file" accept="image/png,image/jpeg,image/webp,image/gif"></div>
-        <img id="preview" class="preview" alt="Selected image preview"><div class="ai-status" id="aiStatus"><span class="status-dot"></span><span>AI screening starts when you choose an image.</span></div><div class="upload-bottom"><span id="msg" class="msg" aria-live="polite"></span><button id="upload" class="gold-button" disabled>Publish anonymously ↗</button></div>
-      </section>
-      <section class="feed-head"><div><p class="section-kicker">EXPLORE</p><h2 id="feedTitle">Latest photos</h2></div><p id="resultNote" class="muted-small">Public gallery · everyone can view and download</p></section>
-      <section id="gallery" class="gallery"><div class="loading">Loading the wall…</div></section>
-    </section>
-  </main>
-  <footer class="site-footer"><a href="https://raazimtech.github.io/Raazim-tech/" target="_blank" rel="noopener noreferrer" class="made-by">Made by <strong>Raazim Tech</strong> ↗</a><span>Gallerify · Public photo gallery</span></footer>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script><script src="https://cdn.jsdelivr.net/npm/nsfwjs@4.4.0/dist/nsfwjs.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="app.js"></script>
-  <script>
-  (function(){
-    const style=document.createElement('style');
-    style.textContent='#image-lightbox{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:30px;background:rgba(0,0,0,.92);backdrop-filter:blur(12px)}#image-lightbox.open{display:flex}#image-lightbox-img{max-width:min(94vw,1400px);max-height:92vh;width:auto;height:auto;object-fit:contain;border-radius:10px;box-shadow:0 30px 90px rgba(0,0,0,.6)}.lightbox-close{position:absolute;top:18px;right:22px;width:46px;height:46px;border:1px solid rgba(255,255,255,.18);border-radius:50%;background:rgba(20,20,20,.8);color:#fff;font-size:30px;line-height:1}.lightbox-close:hover{background:#f5c542;color:#17130a}body.lightbox-open{overflow:hidden}';
-    document.head.appendChild(style);
-    document.addEventListener('click',function(e){const img=e.target.closest('.gallery-image');if(!img)return;let lb=document.getElementById('image-lightbox');if(!lb){lb=document.createElement('div');lb.id='image-lightbox';lb.innerHTML='<button class="lightbox-close" aria-label="Close">×</button><img id="image-lightbox-img" alt="">';document.body.appendChild(lb);lb.addEventListener('click',function(ev){if(ev.target===lb||ev.target.closest('.lightbox-close'))close()})}const big=document.getElementById('image-lightbox-img');big.src=img.currentSrc||img.src;big.alt=img.alt||'Gallerify image';lb.classList.add('open');document.body.classList.add('lightbox-open')});
-    function close(){const lb=document.getElementById('image-lightbox');if(lb){lb.classList.remove('open');document.body.classList.remove('lightbox-open')}}
-    document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
-  })();
-  </script>
-</body>
-</html>
+<header class="site-header"><a class="brand" href="#top" aria-label="Gallerify home"><img src="logo.svg" alt="Gallerify logo"><span>GALLERIFY</span></a><div class="search-wrap"><span class="search-icon">⌕</span><input id="search" type="search" placeholder="Search photos, captions, categories..." aria-label="Search photos"></div><div class="header-actions"><button class="nav-action active" data-view="explore">Explore</button><button class="gold-button" id="jumpUpload">＋ Upload</button><span class="anon-pill">✦ ANONYMOUS</span></div></header>
+<div class="mobile-tags" id="mobileTags"></div><main id="top" class="app-shell"><aside class="sidebar"><div class="side-section"><p class="side-label">DISCOVER</p><button class="side-link active" data-view="explore"><span>◉</span> Explore</button><button class="side-link" data-view="favorites"><span>♡</span> Favorites <em id="favoriteCount">0</em></button></div><div class="side-section"><p class="side-label">CATEGORIES</p><div class="category-list" id="categoryList"></div></div><div class="side-note"><span class="shield">✓</span><div><strong>Anonymous by default</strong><small>No account or profile is required to upload.</small></div></div></aside>
+<section class="content"><section class="hero"><div><p class="eyebrow">THE PUBLIC PHOTO WALL</p><h1>Moments worth<br><span>keeping.</span></h1><p>Share a photo anonymously, choose a category, and let the community discover, favorite, and download it.</p></div></section>
+<section class="upload-card" id="upload"><div class="upload-top"><div><p class="section-kicker">PUBLISH A MEMORY</p><h2>Drop it on the wall.</h2><p class="muted">Choose one category before publishing. Your identity is never requested.</p></div><span class="secure-chip">NO LOGIN</span></div><div class="category-picker"><div class="picker-label">1. Choose a category</div><div class="category-buttons" id="uploadCategories"><button class="category-button" data-category="Travel">✈ Travel</button><button class="category-button" data-category="Art">✎ Art</button><button class="category-button" data-category="Cityscape">▦ Cityscape</button><button class="category-button" data-category="Nature">⌁ Nature</button><button class="category-button" data-category="Inspiration">✦ Inspiration</button></div></div><div class="form-row"><input id="title" class="input" maxlength="200" placeholder="Caption (optional)"><label class="file-drop" for="file"><span class="file-drop-icon">↥</span><span><strong>Choose an image</strong><small>JPG, PNG, WEBP or GIF · max 10 MB</small></span></label><input id="file" class="file-input" type="file" accept="image/png,image/jpeg,image/webp,image/gif"></div><img id="preview" class="preview" alt="Selected image preview"><div class="upload-bottom"><span id="msg" class="msg" aria-live="polite"></span><button id="upload" class="gold-button" disabled>Publish anonymously ↗</button></div></section>
+<section class="feed-head"><div><p class="section-kicker">EXPLORE</p><h2 id="feedTitle">Latest photos</h2></div><p id="resultNote" class="muted-small">Public gallery · everyone can view and download</p></section><section id="gallery" class="gallery"><div class="loading">Loading the wall…</div></section></section></main>
+<footer class="site-footer"><a href="https://raazimtech.github.io/Raazim-tech/" target="_blank" rel="noopener noreferrer" class="made-by">Made by <strong>Raazim Tech</strong> ↗</a><span>Gallerify · Public photo gallery</span></footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="app.js"></script>
+</body></html>
