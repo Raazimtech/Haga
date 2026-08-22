@@ -126,5 +126,23 @@
   <script src="https://cdn.jsdelivr.net/npm/nsfwjs@4.4.0/dist/nsfwjs.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app.js"></script>
+  <script>
+  document.addEventListener('click',function(e){
+    const img=e.target.closest('.gallery-image');
+    if(!img)return;
+    let lb=document.getElementById('image-lightbox');
+    if(!lb){
+      lb=document.createElement('div');lb.id='image-lightbox';
+      lb.innerHTML='<button class="lightbox-close" aria-label="Close">×</button><img id="image-lightbox-img" alt="">';
+      document.body.appendChild(lb);
+      lb.addEventListener('click',function(ev){if(ev.target===lb||ev.target.closest('.lightbox-close'))closeImageLightbox()});
+    }
+    document.getElementById('image-lightbox-img').src=img.currentSrc||img.src;
+    document.getElementById('image-lightbox-img').alt=img.alt||'Gallerify image';
+    lb.classList.add('open');document.body.classList.add('lightbox-open');
+  });
+  function closeImageLightbox(){const lb=document.getElementById('image-lightbox');if(lb){lb.classList.remove('open');document.body.classList.remove('lightbox-open')}}
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeImageLightbox()});
+  </script>
 </body>
 </html>
