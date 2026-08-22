@@ -1,76 +1,53 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Gallarify — a beautiful public place to share and discover memories.">
-  <title>Gallarify — Share the Moment</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Gallarify — a public photo gallery for sharing and discovering memories.">
+<title>Gallarify — Public Photo Gallery</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="site-header">
-    <a class="brand" href="index.html" aria-label="Gallarify home">Gallarify</a>
-    <div class="header-right">
-      <span class="public-badge"><span class="dot"></span> PUBLIC GALLERY</span>
-    </div>
-  </header>
+<header class="site-header">
+  <a class="brand" href="index.html">GALLARIFY</a>
+  <div class="search-wrap"><span>⌕</span><input id="search" type="search" placeholder="Search photos, captions..." aria-label="Search photos"></div>
+  <nav class="header-nav">
+    <a class="nav-active" href="#gallery">Explore</a>
+    <a class="premium-chip" href="#upload">✦ Upload</a>
+    <span class="member-chip">PUBLIC MEMBER</span>
+  </nav>
+</header>
 
-  <main>
-    <section class="hero">
-      <div class="hero-copy">
-        <p class="eyebrow">A WALL OF MEMORIES</p>
-        <h1>Share the moment.<br><span>Keep it forever.</span></h1>
-        <p class="hero-text">A simple, beautiful public gallery for the moments people want to remember. No account. No login. Just upload and share.</p>
-        <a class="hero-link" href="#upload">Share a memory <span>↓</span></a>
-      </div>
+<div class="page-shell">
+  <aside class="sidebar">
+    <div class="side-block"><p class="side-label">DISCOVER</p><a class="side-link active" href="#gallery">◈ Explore</a><a class="side-link" href="#gallery">♡ Favorites</a><a class="side-link" href="#upload">＋ Upload</a></div>
+    <div class="side-block"><p class="side-label">TRENDING TAGS</p><div class="tag-list"><button data-tag="travel">Travel</button><button data-tag="art">Art</button><button data-tag="city">Cityscape</button><button data-tag="nature">Nature</button><button data-tag="inspiration">Inspiration</button></div></div>
+    <div class="side-note"><span class="gold-dot"></span><div><strong>Open gallery</strong><p>Everyone can browse and upload. No account needed.</p></div></div>
+  </aside>
+
+  <main class="main-content">
+    <section class="hero-mini">
+      <div><p class="eyebrow">PUBLIC PHOTO DUMP</p><h1>Moments worth <em>keeping.</em></h1><p>Discover photographs shared by the community and add your own to the wall.</p></div>
+      <a class="hero-upload" href="#upload">Upload a photo <span>↗</span></a>
     </section>
 
     <section class="upload-section" id="upload">
       <div class="upload-panel">
-        <div class="upload-heading">
-          <div>
-            <p class="section-label">UPLOAD</p>
-            <h2>Add your moment</h2>
-            <p class="muted">Choose an image, add an optional caption, and put it on the wall.</p>
-          </div>
-          <div class="upload-icon" aria-hidden="true">＋</div>
-        </div>
-
-        <div class="form-grid">
-          <input id="title" class="input" maxlength="200" placeholder="Caption (optional)" aria-label="Caption">
-          <label class="file-drop" for="file">
-            <span class="file-icon">↥</span>
-            <span><strong>Choose an image</strong><small>PNG, JPG, WEBP up to 10 MB</small></span>
-          </label>
-          <input id="file" class="file-input" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
-        </div>
-
+        <div class="upload-heading"><div><p class="section-label">SHARE TO THE WALL</p><h2>Drop a memory</h2><p class="muted">Public, instant and completely free. Maximum 10 MB per image.</p></div><div class="gold-mark">✦</div></div>
+        <div class="form-grid"><input id="title" class="input" maxlength="200" placeholder="Caption (optional)" aria-label="Caption"><label class="file-drop" for="file"><span class="file-icon">↥</span><span><strong>Choose an image</strong><small>JPG, PNG, WEBP or GIF</small></span></label><input id="file" class="file-input" type="file" accept="image/png,image/jpeg,image/webp,image/gif"></div>
         <img id="preview" class="preview" alt="Selected image preview">
-        <div class="upload-actions">
-          <div id="msg" class="msg" aria-live="polite"></div>
-          <button id="upload" class="button">Publish image <span>↗</span></button>
-        </div>
+        <div class="upload-actions"><div id="msg" class="msg" aria-live="polite"></div><button id="upload" class="button gold-button">Publish <span>↗</span></button></div>
       </div>
     </section>
 
-    <section class="gallery-section">
-      <div class="gallery-heading">
-        <div>
-          <p class="section-label">THE WALL</p>
-          <h2>Latest memories</h2>
-        </div>
-        <p class="gallery-note">Every image shared here is public.</p>
-      </div>
-      <section id="gallery" class="grid"><div class="loading">Loading memories…</div></section>
+    <section class="gallery-section" id="gallery">
+      <div class="gallery-heading"><div><p class="section-label">EXPLORE</p><h2>Community Collection</h2></div><p class="gallery-note">Latest uploads · Publicly viewable</p></div>
+      <section id="gallery-grid" class="grid"><div class="loading">Loading memories…</div></section>
     </section>
   </main>
-
-  <footer class="site-footer">
-    <div>Gallarify</div>
-    <div>Made by <strong>Raazim Tech</strong></div>
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="app.js"></script>
+</div>
+<footer class="site-footer"><div>GALLARIFY</div><div>Made by <strong>Raazim Tech</strong></div></footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="app.js"></script>
 </body>
 </html>
