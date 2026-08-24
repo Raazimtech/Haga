@@ -1,0 +1,14 @@
+{
+  "name": "Haga — Never Lose the Location",
+  "short_name": "Haga",
+  "description": "Create, share and find exact locations with simple Haga codes.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#07101d",
+  "theme_color": "#07101d",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "logo.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
