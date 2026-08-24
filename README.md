@@ -1,8 +1,8 @@
-# Halkas
+# Raad
 
 **Never Lose the Location.**
 
-Halkas is a lightweight location-sharing web app. A user captures their GPS position, Halkas creates a short code, and another person can use that code to find the saved point on an interactive map and draw a road route from their current position.
+Raad is a lightweight location-sharing web app. A user captures their GPS position, Raad creates a short code, and another person can use that code to find the saved point on an interactive map and get live guidance from their current position.
 
 ## Stack
 
