@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
-Sitemap: https://raazimtech.github.io/Halkas/sitemap.xml
+Disallow: /app.html
+Sitemap: https://raazimtech.github.io/Haga/sitemap.xml
