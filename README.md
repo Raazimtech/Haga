@@ -1,8 +1,8 @@
-# Raad
+# Haga
 
 **Never Lose the Location.**
 
-Raad is a lightweight location-sharing web app. A user captures their GPS position, Raad creates a short code, and another person can use that code to find the saved point on an interactive map and get live guidance from their current position.
+Haga is a lightweight location-sharing web app. A user captures their GPS position, Haga creates a short code, and another person can use that code to find the saved point on an interactive map and get live guidance from their current position.
 
 ## Stack
 
