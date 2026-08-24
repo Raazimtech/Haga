@@ -1,27 +1,230 @@
-const SUPABASE_URL='https://dpiwdhtbhwjgatvcfkcb.supabase.co';
-const SUPABASE_KEY='sb_publishable_PSZnTEo74jObih_6TTpXVQ_tJwzTnXY';
-const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-const CATEGORIES=['Travel','Art','Cityscape','Nature','Inspiration'];
-const OWNER_KEY='gallarify_owner_tokens';
-const $=id=>document.getElementById(id);let selectedCategory='',activeCategory='',currentView='explore';
-const favorites=new Set(JSON.parse(localStorage.getItem('gallarify_favorites')||'[]'));const owners=JSON.parse(localStorage.getItem(OWNER_KEY)||'{}');
-function escapeHtml(s=''){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
-function setMsg(text,error=false){const msg=$('msg');if(msg){msg.textContent=text;msg.className=error?'msg error-msg':'msg'}}
-function saveFavorites(){localStorage.setItem('gallarify_favorites',JSON.stringify([...favorites]));if($('favoriteCount'))$('favoriteCount').textContent=favorites.size}
-function saveOwners(){localStorage.setItem(OWNER_KEY,JSON.stringify(owners))}
-function newOwnerToken(){const bytes=new Uint8Array(32);crypto.getRandomValues(bytes);return [...bytes].map(b=>b.toString(16).padStart(2,'0')).join('')}
-function selectCategory(cat){selectedCategory=cat;document.querySelectorAll('#uploadCategories .category-button').forEach(b=>b.classList.toggle('selected',b.dataset.category===cat));updateUploadState()}
-function updateUploadState(){$('upload').disabled=!Boolean(selectedCategory&&$('file')?.files?.[0])}
-function buildCategoryLists(){const side=CATEGORIES.map(c=>`<button class="category-filter" data-category="${c}">${c}</button>`).join('');$('categoryList').innerHTML=side;$('mobileTags').innerHTML=`<button class="category-filter active" data-category="">All</button>${side}`;document.querySelectorAll('.category-filter').forEach(b=>b.addEventListener('click',()=>{activeCategory=b.dataset.category||'';currentView='explore';document.querySelectorAll('.category-filter').forEach(x=>x.classList.toggle('active',(x.dataset.category||'')===activeCategory));syncViewButtons();load()}))}
-function syncViewButtons(){document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===currentView));$('feedTitle').textContent=currentView==='favorites'?'Your favorites':activeCategory||'Latest photos'}
-async function load(){const g=$('gallery');if(!g)return;g.innerHTML='<div class="loading">Loading the wall…</div>';const {data,error}=await db.from('photos').select('id,title,image_path,image_url,category,created_at').order('created_at',{ascending:false});if(error){g.innerHTML='<div class="empty">Could not load the gallery.</div>';return}const search=$('search').value.trim().toLowerCase();let rows=(data||[]).filter(r=>!search||String(r.title||'').toLowerCase().includes(search)||String(r.category||'').toLowerCase().includes(search));if(activeCategory)rows=rows.filter(r=>(r.category||'Inspiration')===activeCategory);if(currentView==='favorites')rows=rows.filter(r=>favorites.has(r.id));$('resultNote').textContent=`${rows.length} ${rows.length===1?'photo':'photos'} · public gallery · anonymous uploads`;if(!rows.length){g.innerHTML='<div class="empty">Nothing here yet.</div>';return}g.innerHTML=rows.map(cardHtml).join('');bindCardActions()}
-function cardHtml(p){const url=p.image_url||db.storage.from('gallery').getPublicUrl(p.image_path).data.publicUrl;const fav=favorites.has(p.id);const mine=Boolean(owners[p.id]);return `<article class="card"><div class="card-media"><img class="gallery-image" src="${escapeHtml(url)}" alt="${escapeHtml(p.title||'Memory')}" loading="lazy" data-full-image="${escapeHtml(url)}"><div class="card-overlay"><span class="creator">@anonymous</span><div class="card-actions"><button class="icon-button favorite ${fav?'active':''}" data-id="${p.id}" aria-label="${fav?'Remove from favorites':'Add to favorites'}" title="${fav?'Remove from favorites':'Add to favorites'}">${fav?'♥':'♡'}</button><button class="icon-button download" data-url="${escapeHtml(url)}" data-name="gallerify-${p.id}" aria-label="Download image" title="Download image">↓</button></div></div></div><div class="card-info"><span class="category-tag">${escapeHtml(p.category||'Inspiration')}</span><div class="caption">${escapeHtml(p.title||'Untitled memory')}</div>${mine?'<button class="delete-button" data-id="'+p.id+'" aria-label="Delete your image">Delete image</button>':''}</div></article>`}
-function bindCardActions(){document.querySelectorAll('.favorite').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.id;if(favorites.has(id))favorites.delete(id);else favorites.add(id);saveFavorites();load()}));document.querySelectorAll('.download').forEach(b=>b.addEventListener('click',()=>downloadImage(b.dataset.url,b.dataset.name)));document.querySelectorAll('.delete-button').forEach(b=>b.addEventListener('click',()=>deleteOwnPhoto(b.dataset.id)));document.querySelectorAll('.gallery-image').forEach(img=>img.addEventListener('click',()=>openLightbox(img.dataset.fullImage,img.alt)))}
-function openLightbox(url,alt='Image'){let box=document.getElementById('lightbox');if(!box){box=document.createElement('div');box.id='lightbox';box.className='lightbox';box.innerHTML='<button class="lightbox-close" aria-label="Close image">×</button><img class="lightbox-image" alt="">';document.body.appendChild(box);box.addEventListener('click',e=>{if(e.target===box||e.target.classList.contains('lightbox-close'))box.classList.remove('open')})}box.querySelector('.lightbox-image').src=url;box.querySelector('.lightbox-image').alt=alt;box.classList.add('open')}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementById('lightbox')?.classList.remove('open')});
-async function downloadImage(url,name){try{const res=await fetch(url);if(!res.ok)throw new Error();const blob=await res.blob();const objectUrl=URL.createObjectURL(blob);const a=document.createElement('a');a.href=objectUrl;a.download=`${name}.jpg`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(objectUrl),1000)}catch{window.open(url,'_blank','noopener,noreferrer')}}
-async function deleteOwnPhoto(id){const token=owners[id];if(!token)return setMsg('Only the original uploader can delete this image.',true);if(!confirm('Delete your image permanently?'))return;const {data,error}=await db.rpc('delete_photo',{p_id:id,p_owner_token:token});if(error||!data){setMsg(error?.message||'Delete failed.',true);return}delete owners[id];saveOwners();favorites.delete(id);saveFavorites();setMsg('Your image was deleted.');await load()}
-$('file').addEventListener('change',()=>{const f=$('file').files?.[0],preview=$('preview');updateUploadState();if(!f)return;if(!f.type.startsWith('image/')){setMsg('Only image files are allowed.',true);return}if(f.size>10*1024*1024){setMsg('Image must be 10MB or smaller.',true);return}preview.src=URL.createObjectURL(f);preview.style.display='block';setMsg('')});
-document.querySelectorAll('#uploadCategories .category-button').forEach(b=>b.addEventListener('click',()=>selectCategory(b.dataset.category)));
-$('upload').addEventListener('click',async()=>{const f=$('file').files?.[0],title=$('title').value.trim();if(!selectedCategory)return setMsg('Choose a category first.',true);if(!f)return setMsg('Choose an image first.',true);const safeName=f.name.replace(/[^a-zA-Z0-9._-]/g,'')||'image',path=`${crypto.randomUUID()}-${safeName}`,button=$('upload');button.disabled=true;setMsg('Publishing anonymously…');const {error:uploadError}=await db.storage.from('gallery').upload(path,f,{contentType:f.type,upsert:false});if(uploadError){setMsg(uploadError.message,true);updateUploadState();return}const publicUrl=db.storage.from('gallery').getPublicUrl(path).data.publicUrl;const token=newOwnerToken();const {data:created,error:insertError}=await db.rpc('create_photo',{p_title:title,p_image_path:path,p_image_url:publicUrl,p_category:selectedCategory,p_owner_token:token});if(insertError||!created){await db.storage.from('gallery').remove([path]);setMsg(insertError?.message||'Could not publish image.',true);updateUploadState();return}owners[created.id]=token;saveOwners();$('title').value='';$('file').value='';$('preview').style.display='none';selectedCategory='';document.querySelectorAll('#uploadCategories .category-button').forEach(b=>b.classList.remove('selected'));setMsg('Published anonymously.');await load();updateUploadState()});
-$('search').addEventListener('input',load);$('jumpUpload').addEventListener('click',()=>document.querySelector('#upload').scrollIntoView({behavior:'smooth'}));document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{currentView=b.dataset.view;activeCategory='';document.querySelectorAll('.category-filter').forEach(x=>x.classList.toggle('active',(x.dataset.category||'')===''));syncViewButtons();load()}));buildCategoryLists();saveFavorites();syncViewButtons();load();
+const supabaseClient = window.supabase.createClient(HALKAS_SUPABASE_URL, HALKAS_SUPABASE_KEY);
+
+const $ = (id) => document.getElementById(id);
+let currentCoords = null;
+let foundLocation = null;
+let map;
+let locationMarker;
+let userMarker;
+let routeLayer;
+let mapReady = false;
+
+function toast(message) {
+  const el = $('toast');
+  el.textContent = message;
+  el.classList.add('show');
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+function scrollToTarget(selector) {
+  document.querySelector(selector)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+document.querySelectorAll('[data-scroll]').forEach((button) => {
+  button.addEventListener('click', () => scrollToTarget(button.dataset.scroll));
+});
+
+function initMap() {
+  map = L.map('map', { zoomControl: true }).setView([9.56, 44.06], 6);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+  mapReady = true;
+  setTimeout(() => map.invalidateSize(), 150);
+}
+
+function codeFor() {
+  const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const bytes = new Uint8Array(4);
+  crypto.getRandomValues(bytes);
+  let value = '';
+  bytes.forEach((b) => { value += alphabet[b % alphabet.length]; });
+  return `HK-${value}`;
+}
+
+function setGpsStatus(title, subtitle, good = false) {
+  $('gps-status').textContent = title;
+  $('gps-status').style.color = good ? 'var(--success)' : '';
+  $('coords').textContent = subtitle;
+}
+
+function captureLocation() {
+  if (!navigator.geolocation) {
+    setGpsStatus('Location unavailable', 'This browser does not support GPS location.');
+    toast('Your browser does not support location services.');
+    return;
+  }
+  const btn = $('locate-btn');
+  btn.disabled = true;
+  btn.textContent = 'Getting your exact location…';
+  setGpsStatus('Finding you…', 'Allow location access when your browser asks.');
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      currentCoords = { lat: position.coords.latitude, lng: position.coords.longitude, accuracy: position.coords.accuracy };
+      setGpsStatus('Location captured', `${currentCoords.lat.toFixed(6)}, ${currentCoords.lng.toFixed(6)} · ±${Math.round(currentCoords.accuracy)}m`, true);
+      $('create-btn').disabled = false;
+      btn.disabled = false;
+      btn.textContent = 'Refresh current location ⌖';
+      if (mapReady) {
+        if (userMarker) map.removeLayer(userMarker);
+        userMarker = L.circleMarker([currentCoords.lat, currentCoords.lng], { radius: 7, color: '#5da7ff', fillColor: '#fff', fillOpacity: 1, weight: 3 }).addTo(map);
+        map.setView([currentCoords.lat, currentCoords.lng], 16);
+      }
+      toast('Exact location captured.');
+    },
+    (error) => {
+      btn.disabled = false;
+      btn.textContent = 'Try location again ⌖';
+      setGpsStatus('Could not get location', error.code === 1 ? 'Location permission was denied.' : 'Try again from an open area.');
+      toast(error.code === 1 ? 'Please allow location access for Halkas.' : 'Could not get your location.');
+    },
+    { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+  );
+}
+
+async function createLocation() {
+  if (!currentCoords) return toast('Get your current location first.');
+  const button = $('create-btn');
+  button.disabled = true;
+  button.textContent = 'Creating…';
+  let created = null;
+  let error = null;
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const code = codeFor();
+    const result = await supabaseClient.rpc('create_location', {
+      p_code: code,
+      p_latitude: currentCoords.lat,
+      p_longitude: currentCoords.lng,
+      p_label: $('location-label').value.trim() || null,
+      p_note: $('location-note').value.trim() || null
+    });
+    created = result.data;
+    error = result.error;
+    if (!error) break;
+    if (!String(error.message || '').toLowerCase().includes('duplicate')) break;
+  }
+  button.disabled = false;
+  button.textContent = 'Create Halkas code';
+  if (error || !created) {
+    console.error(error);
+    toast('Could not create the Halkas code.');
+    return;
+  }
+  const row = Array.isArray(created) ? created[0] : created;
+  const link = `${window.location.origin}${window.location.pathname}?code=${encodeURIComponent(row.code)}`;
+  $('create-result').innerHTML = `
+    <span class="panel-kicker">YOUR HALKAS CODE</span>
+    <div class="code">${row.code}</div>
+    <small style="color:#7c8ea4">Anyone with this code can find the saved location while it is active.</small>
+    <div class="result-actions">
+      <button class="secondary-btn" id="copy-code">Copy code</button>
+      <button class="secondary-btn" id="copy-link">Copy link</button>
+      <button class="whatsapp" id="share-whatsapp">Share on WhatsApp</button>
+    </div>`;
+  $('create-result').classList.remove('hidden');
+  $('copy-code').onclick = () => copyText(row.code, 'Code copied.');
+  $('copy-link').onclick = () => copyText(link, 'Halkas link copied.');
+  $('share-whatsapp').onclick = () => window.open(`https://wa.me/?text=${encodeURIComponent(`Here is my Halkas location: ${link}`)}`, '_blank', 'noopener');
+  toast(`Halkas ${row.code} created.`);
+}
+
+async function copyText(value, message) {
+  try { await navigator.clipboard.writeText(value); toast(message); }
+  catch { toast('Copy is not available in this browser.'); }
+}
+
+async function findLocation(codeOverride) {
+  const code = (codeOverride || $('code-input').value).trim().toUpperCase();
+  if (!code) return toast('Enter a Halkas code first.');
+  $('code-input').value = code;
+  $('find-btn').disabled = true;
+  $('find-btn').textContent = '…';
+  const { data, error } = await supabaseClient.rpc('lookup_location', { p_code: code });
+  $('find-btn').disabled = false;
+  $('find-btn').textContent = 'Find';
+  if (error || !data?.length) {
+    $('find-result').innerHTML = `<strong>Location not found</strong><small>That code may be wrong or expired. Check it and try again.</small>`;
+    $('find-result').classList.remove('hidden');
+    $('guide-panel').classList.add('hidden');
+    toast('No active Halkas location found.');
+    return;
+  }
+  foundLocation = data[0];
+  const label = foundLocation.label || 'Halkas location';
+  $('find-result').innerHTML = `<strong>${escapeHtml(label)}</strong><small>Code ${escapeHtml(foundLocation.code)} · active until ${new Date(foundLocation.expires_at).toLocaleDateString()}</small>${foundLocation.note ? `<small style="margin-top:8px">${escapeHtml(foundLocation.note)}</small>` : ''}`;
+  $('find-result').classList.remove('hidden');
+  showFoundLocation();
+  $('guide-panel').classList.remove('hidden');
+  $('route-result').classList.add('hidden');
+  toast('Location found on the map.');
+}
+
+function showFoundLocation() {
+  if (!mapReady || !foundLocation) return;
+  if (locationMarker) map.removeLayer(locationMarker);
+  locationMarker = L.circleMarker([foundLocation.latitude, foundLocation.longitude], { radius: 9, color: '#fff', fillColor: '#5da7ff', fillOpacity: 1, weight: 3 }).addTo(map);
+  locationMarker.bindPopup(`<b>${escapeHtml(foundLocation.label || 'Halkas location')}</b><br>${escapeHtml(foundLocation.code)}`).openPopup();
+  map.setView([foundLocation.latitude, foundLocation.longitude], 16);
+  setTimeout(() => map.invalidateSize(), 100);
+}
+
+async function guideThere() {
+  if (!foundLocation) return;
+  const button = $('guide-btn');
+  button.disabled = true;
+  button.textContent = 'Getting route…';
+  if (!navigator.geolocation) {
+    button.disabled = false; button.innerHTML = 'Guide Me There <span>↗</span>';
+    return toast('Location services are not available.');
+  }
+  navigator.geolocation.getCurrentPosition(async (position) => {
+    const start = [position.coords.longitude, position.coords.latitude];
+    const end = [foundLocation.longitude, foundLocation.latitude];
+    try {
+      const url = `https://router.project-osrm.org/route/v1/driving/${start.join(',')};${end.join(',')}?overview=full&geometries=geojson&steps=false`;
+      const response = await fetch(url);
+      const payload = await response.json();
+      if (!payload.routes?.length) throw new Error('No route');
+      const route = payload.routes[0];
+      if (userMarker) map.removeLayer(userMarker);
+      userMarker = L.circleMarker([position.coords.latitude, position.coords.longitude], { radius: 7, color: '#5da7ff', fillColor: '#fff', fillOpacity: 1, weight: 3 }).addTo(map);
+      if (routeLayer) map.removeLayer(routeLayer);
+      routeLayer = L.geoJSON(route.geometry, { style: { color: '#5da7ff', weight: 6, opacity: .9 } }).addTo(map);
+      map.fitBounds(routeLayer.getBounds(), { padding: [35, 35] });
+      const km = (route.distance / 1000).toFixed(1);
+      const mins = Math.max(1, Math.round(route.duration / 60));
+      $('route-result').textContent = `Route ready · ${km} km · about ${mins} min by road. The route is drawn directly on the Halkas map.`;
+      $('route-result').classList.remove('hidden');
+      $('guide-copy').textContent = 'Your current position is the starting point. Follow the route drawn on the map.';
+      toast('Route calculated.');
+    } catch (err) {
+      console.error(err);
+      toast('Could not calculate a route right now.');
+    } finally {
+      button.disabled = false; button.innerHTML = 'Guide Me There <span>↗</span>';
+    }
+  }, (error) => {
+    button.disabled = false; button.innerHTML = 'Guide Me There <span>↗</span>';
+    toast(error.code === 1 ? 'Allow location access so Halkas knows where you are.' : 'Could not get your current position.');
+  }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>'"]/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#039;', '"':'&quot;' }[char]));
+}
+
+$('locate-btn').addEventListener('click', captureLocation);
+$('create-btn').addEventListener('click', createLocation);
+$('find-btn').addEventListener('click', () => findLocation());
+$('guide-btn').addEventListener('click', guideThere);
+$('code-input').addEventListener('keydown', (event) => { if (event.key === 'Enter') findLocation(); });
+$('year').textContent = new Date().getFullYear();
+
+initMap();
+const sharedCode = new URLSearchParams(window.location.search).get('code');
+if (sharedCode) {
+  $('code-input').value = sharedCode.toUpperCase();
+  setTimeout(() => { scrollToTarget('#find'); findLocation(sharedCode); }, 250);
+}

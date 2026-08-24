@@ -1,14 +1,121 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#121212"><meta name="robots" content="index, follow, max-image-preview:large"><meta name="description" content="Gallerify is a premium public photo gallery for anonymous photo sharing and discovery. Upload memories by category and download public images."><meta name="keywords" content="Gallerify, public photo gallery, anonymous photo sharing, photo sharing, image gallery, photography, memories, Travel, Art, Cityscape, Nature, Inspiration"><meta name="author" content="Raazim Tech"><meta name="application-name" content="Gallerify"><link rel="canonical" href="https://raazimtech.github.io/Halkas/"><link rel="icon" type="image/svg+xml" href="logo.svg"><link rel="apple-touch-icon" href="logo.svg"><meta property="og:type" content="website"><meta property="og:site_name" content="Gallerify"><meta property="og:title" content="Gallerify — Premium Public Photo Gallery"><meta property="og:description" content="Discover and anonymously share beautiful public photos on Gallerify."><meta property="og:url" content="https://raazimtech.github.io/Halkas/"><meta property="og:image" content="https://raazimtech.github.io/Halkas/logo.svg"><title>Gallerify — Premium Public Photo Gallery</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Gallerify","url":"https://raazimtech.github.io/Halkas/","description":"A premium public photo gallery for anonymous photo sharing and discovery.","publisher":{"@type":"Organization","name":"Raazim Tech","url":"https://raazimtech.github.io/Raazim-tech/"}}</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b1220" />
+  <meta name="description" content="Halkas — share your exact location with a simple code. Find it, map it, and guide people there." />
+  <title>Halkas — Never Lose the Location</title>
+  <link rel="icon" href="logo.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<header class="site-header"><a class="brand" href="#top" aria-label="Gallerify home"><img src="logo.svg" alt="Gallerify logo"><span>GALLERIFY</span></a><div class="search-wrap"><span class="search-icon">⌕</span><input id="search" type="search" placeholder="Search photos, captions, categories..." aria-label="Search photos"></div><div class="header-actions"><button class="nav-action active" data-view="explore">Explore</button><button class="gold-button" id="jumpUpload">＋ Upload</button><span class="anon-pill">✦ ANONYMOUS</span></div></header>
-<div class="mobile-tags" id="mobileTags"></div><main id="top" class="app-shell"><aside class="sidebar"><div class="side-section"><p class="side-label">DISCOVER</p><button class="side-link active" data-view="explore"><span>◉</span> Explore</button><button class="side-link" data-view="favorites"><span>♡</span> Favorites <em id="favoriteCount">0</em></button></div><div class="side-section"><p class="side-label">CATEGORIES</p><div class="category-list" id="categoryList"></div></div><div class="side-note"><span class="shield">✓</span><div><strong>Anonymous by default</strong><small>No account or profile is required to upload.</small></div></div></aside>
-<section class="content"><section class="hero"><div><p class="eyebrow">THE PUBLIC PHOTO WALL</p><h1>Moments worth<br><span>keeping.</span></h1><p>Share a photo anonymously, choose a category, and let the community discover, favorite, and download it.</p></div></section>
-<section class="upload-card" id="upload"><div class="upload-top"><div><p class="section-kicker">PUBLISH A MEMORY</p><h2>Drop it on the wall.</h2><p class="muted">Choose one category before publishing. Your identity is never requested.</p></div><span class="secure-chip">NO LOGIN</span></div><div class="category-picker"><div class="picker-label">1. Choose a category</div><div class="category-buttons" id="uploadCategories"><button class="category-button" data-category="Travel">✈ Travel</button><button class="category-button" data-category="Art">✎ Art</button><button class="category-button" data-category="Cityscape">▦ Cityscape</button><button class="category-button" data-category="Nature">⌁ Nature</button><button class="category-button" data-category="Inspiration">✦ Inspiration</button></div></div><div class="form-row"><input id="title" class="input" maxlength="200" placeholder="Caption (optional)"><label class="file-drop" for="file"><span class="file-drop-icon">↥</span><span><strong>Choose an image</strong><small>JPG, PNG, WEBP or GIF · max 10 MB</small></span></label><input id="file" class="file-input" type="file" accept="image/png,image/jpeg,image/webp,image/gif"></div><img id="preview" class="preview" alt="Selected image preview"><div class="upload-bottom"><span id="msg" class="msg" aria-live="polite"></span><button id="upload" class="gold-button" disabled>Publish anonymously ↗</button></div></section>
-<section class="feed-head"><div><p class="section-kicker">EXPLORE</p><h2 id="feedTitle">Latest photos</h2></div><p id="resultNote" class="muted-small">Public gallery · everyone can view and download</p></section><section id="gallery" class="gallery"><div class="loading">Loading the wall…</div></section></section></main>
-<footer class="site-footer"><a href="https://raazimtech.github.io/Raazim-tech/" target="_blank" rel="noopener noreferrer" class="made-by">Made by <strong>Raazim Tech</strong> ↗</a><span>Gallerify · Public photo gallery</span></footer>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="app.js"></script>
-</body></html>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="Halkas home">
+        <img src="logo.svg" alt="Halkas" />
+        <span>Halkas</span>
+      </a>
+      <nav>
+        <a href="#share">Share</a>
+        <a href="#find">Find</a>
+        <a href="#how">How it works</a>
+      </nav>
+      <button class="nav-cta" data-scroll="#share">Share location</button>
+    </header>
+
+    <main id="top">
+      <section class="hero section-pad">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="pulse"></span> Location sharing, simplified</div>
+          <h1>Never lose<br /><span>the location.</span></h1>
+          <p class="hero-text">Create a simple Halkas code for your exact location. Send it to anyone, let them find you on the map, and guide them there.</p>
+          <div class="hero-actions">
+            <button class="primary-btn" data-scroll="#share">Share my location <span>→</span></button>
+            <button class="ghost-btn" data-scroll="#find">Find a location</button>
+          </div>
+          <div class="trust-row"><span>✓ No app download</span><span>✓ Works on mobile & desktop</span><span>✓ Built for real life</span></div>
+        </div>
+        <div class="hero-card">
+          <div class="mini-map-grid"></div>
+          <div class="hero-pin"><span></span></div>
+          <div class="map-label"><strong>Halkas location</strong><small>Exact coordinates saved</small></div>
+          <div class="floating-code"><small>YOUR CODE</small><strong>HK-7M4Q</strong></div>
+        </div>
+      </section>
+
+      <section class="stats section-pad">
+        <div><strong>1</strong><span>simple code</span></div>
+        <div><strong>30</strong><span>days active by default</span></div>
+        <div><strong>∞</strong><span>people can find it</span></div>
+      </section>
+
+      <section id="share" class="workspace section-pad">
+        <div class="section-heading"><span class="step">01</span><div><h2>Share your location</h2><p>Use your device GPS and Halkas creates a shareable code.</p></div></div>
+        <div class="workspace-grid">
+          <div class="panel form-panel">
+            <div class="panel-top"><div><span class="panel-kicker">CREATE A HALKAS</span><h3>Where should they meet you?</h3></div><span class="status-dot">Ready</span></div>
+            <label>Location name <span>optional</span><input id="location-label" type="text" maxlength="80" placeholder="e.g. Main gate, office, home" /></label>
+            <label>Note <span>optional</span><textarea id="location-note" maxlength="240" rows="3" placeholder="Anything the person should know before arriving?"></textarea></label>
+            <div class="location-readout"><div class="loc-icon">⌖</div><div><strong id="gps-status">Location not captured</strong><small id="coords">Tap the button below to get your exact coordinates.</small></div></div>
+            <div class="form-actions"><button id="locate-btn" class="primary-btn full">Use my current location <span>⌖</span></button><button id="create-btn" class="secondary-btn full" disabled>Create Halkas code</button></div>
+            <div id="create-result" class="result-card hidden"></div>
+          </div>
+          <div class="panel info-panel">
+            <div class="info-number">01</div><h3>Your location stays simple.</h3><p>Halkas stores the coordinates behind a short code. You share the code, not a messy address.</p>
+            <div class="feature"><span>01</span><div><strong>Precise GPS</strong><small>Uses your browser's location services.</small></div></div>
+            <div class="feature"><span>02</span><div><strong>Easy sharing</strong><small>Copy a link or open WhatsApp with one tap.</small></div></div>
+            <div class="feature"><span>03</span><div><strong>Temporary by design</strong><small>Codes expire automatically after 30 days.</small></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="find" class="workspace section-pad find-section">
+        <div class="section-heading"><span class="step">02</span><div><h2>Find a Halkas</h2><p>Enter a code and put the location on the map.</p></div></div>
+        <div class="finder-grid">
+          <div class="panel search-panel">
+            <span class="panel-kicker">FIND A LOCATION</span>
+            <h3>Got a Halkas code?</h3>
+            <p>Enter the code exactly as it was shared with you.</p>
+            <div class="search-box"><input id="code-input" type="text" maxlength="8" placeholder="HK-7M4Q" autocomplete="off" /><button id="find-btn">Find</button></div>
+            <div class="quick-link"><span>Tip</span> You can also open a shared Halkas link directly.</div>
+            <div id="find-result" class="find-result hidden"></div>
+          </div>
+          <div class="map-wrap panel"><div id="map"></div><div class="map-overlay"><span id="map-status">Map ready</span></div></div>
+        </div>
+        <div id="guide-panel" class="guide-card hidden">
+          <div><span class="panel-kicker">ARRIVE THERE</span><h3>Guide me to this location</h3><p id="guide-copy">Allow location access and Halkas will draw the route here.</p></div>
+          <button id="guide-btn" class="primary-btn">Guide Me There <span>↗</span></button>
+        </div>
+        <div id="route-result" class="route-result hidden"></div>
+      </section>
+
+      <section id="how" class="how section-pad">
+        <div class="section-heading"><span class="step">03</span><div><h2>How Halkas works</h2><p>No complicated addresses. No explaining landmarks for ten minutes.</p></div></div>
+        <div class="how-grid">
+          <article><span>01</span><h3>Capture</h3><p>Get your exact GPS position in seconds.</p></article>
+          <article><span>02</span><h3>Code</h3><p>Halkas creates a short unique location code.</p></article>
+          <article><span>03</span><h3>Share</h3><p>Send the code or a direct link to the person coming.</p></article>
+          <article><span>04</span><h3>Guide</h3><p>They see the point and can draw a route from where they are.</p></article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-brand"><img src="logo.svg" alt="" /><strong>Halkas</strong></div>
+      <p>Never Lose the Location.</p>
+      <div class="footer-meta"><span>© <span id="year"></span> Halkas</span><span class="made-by">Made by <strong>Raazim Tech</strong></span></div>
+    </footer>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
